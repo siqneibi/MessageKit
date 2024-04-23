@@ -30,6 +30,16 @@ import UIKit
 open class MessagesViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
   // MARK: Lifecycle
 
+  public init(_ bannerHeight: CGFloat = 0) {
+    super.init(nibName: nil, bundle: nil)
+    self.bannerHeight = bannerHeight
+    self.addBannerFlag = (bannerHeight > 0)
+  }
+  
+  public required init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+  }
+
   deinit {
     removeMenuControllerObservers()
     clearMemoryCache()
@@ -65,6 +75,13 @@ open class MessagesViewController: UIViewController, UICollectionViewDelegateFlo
       updateMessageCollectionViewBottomInset()
     }
   }
+
+  var addBannerFlag = false
+  var bannerHeight: CGFloat = 0
+  open lazy var bannerView: UIView = {
+    let view = UIView()
+    return view
+  }()
 
   open override func viewDidLoad() {
     super.viewDidLoad()
@@ -327,7 +344,12 @@ open class MessagesViewController: UIViewController, UICollectionViewDelegateFlo
   }
 
   private func setupSubviews() {
-    view.addSubviews(messagesCollectionView, inputContainerView)
+    if addBannerFlag {
+      view.addSubviews(messagesCollectionView, bannerView, inputContainerView)
+    }
+    else {
+      view.addSubviews(messagesCollectionView, inputContainerView)
+    }
   }
 
   private func setupConstraints() {
@@ -335,12 +357,27 @@ open class MessagesViewController: UIViewController, UICollectionViewDelegateFlo
     /// Constraints of inputContainerView are managed by keyboardManager
     inputContainerView.translatesAutoresizingMaskIntoConstraints = false
 
-    NSLayoutConstraint.activate([
-      messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
-      messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-      messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-    ])
+    if addBannerFlag {
+      bannerView.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+        bannerView.topAnchor.constraint(equalTo: view.topAnchor),
+        bannerView.heightAnchor.constraint(equalToConstant: bannerHeight),
+        bannerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        bannerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        bannerView.bottomAnchor.constraint(equalTo: messagesCollectionView.topAnchor),
+        messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+      ])
+  }
+    else {
+      NSLayoutConstraint.activate([
+        messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
+        messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+      ])
+    }
   }
 
   private func setupDelegates() {
