@@ -360,20 +360,20 @@ open class MessagesViewController: UIViewController, UICollectionViewDelegateFlo
     if addBannerFlag {
       bannerView.translatesAutoresizingMaskIntoConstraints = false
       NSLayoutConstraint.activate([
-        bannerView.topAnchor.constraint(equalTo: view.topAnchor),
+        bannerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
         bannerView.heightAnchor.constraint(equalToConstant: bannerHeight),
         bannerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
         bannerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         bannerView.bottomAnchor.constraint(equalTo: messagesCollectionView.topAnchor),
-        messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        messagesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
         messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
       ])
   }
     else {
       NSLayoutConstraint.activate([
-        messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
-        messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        messagesCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        messagesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
         messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
       ])
